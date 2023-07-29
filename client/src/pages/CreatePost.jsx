@@ -26,7 +26,31 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   };
 
-  const generateImage = () => {};
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImage(true);
+        const response = await fetch("http://localhost:8080/api/v1/openai", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+
+        console.log(response);
+        const data = await response.json();
+
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (error) {
+        alert(error);
+      } finally {
+        setGeneratingImage(false);
+      }
+    } else {
+      alert("Please enter a prompt");
+    }
+  };
   return (
     <section className="max-w-7xl mx-auto">
       <div className="">
@@ -83,7 +107,7 @@ const CreatePost = () => {
         <div className="mt-5 flex gap-5">
           <button
             type="button"
-            onClick={{ generateImage }}
+            onClick={generateImage}
             className="text-white font-medium bg-green-700 rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {generatingImage ? "Generating...." : "Generate"}
