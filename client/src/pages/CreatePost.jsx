@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { preview } from "../assets";
 import { getRandomPrompt } from "../utils";
 import { FormField, Loader } from "../components";
+import link from "../../config";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const CreatePost = () => {
       setLoading(true);
 
       try {
-        const response = await fetch("http://localhost:8080/api/v1/post", {
+        const response = await fetch(`${link}/api/v1/post`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -55,7 +56,7 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImage(true);
-        const response = await fetch("http://localhost:8080/api/v1/openai", {
+        const response = await fetch(`${link}/api/v1/openai`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
